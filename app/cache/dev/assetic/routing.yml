@@ -2,4 +2,4 @@ _assetic:
   resource: .
   type: assetic
 _app:
-  resource: /Users/Frantz/Sites/imbuzzit-new/www/app/config/routing_dev.yml
+  resource: /Users/Frantz/Sites/imbuzzit-new/app/config/routing_dev.yml

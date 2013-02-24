@@ -1,0 +1,7 @@
+parameters:
+#    imbuzzit_admin.example.class: Imbuzzit\AdminBundle\Example
+
+services:
+#    imbuzzit_admin.example:
+#        class: %imbuzzit_admin.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

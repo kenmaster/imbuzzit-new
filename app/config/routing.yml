@@ -1,6 +1,10 @@
+imbuzzit_admin:
+    resource: "@ImbuzzitAdminBundle/Resources/config/routing.yml"
+    prefix:   /admin
+
 imbuzzit_api:
     resource: "@ImbuzzitApiBundle/Resources/config/routing.yml"
-    prefix:   /
+    prefix:   /api
 
 # Internal routing configuration to handle ESI
 # ****** WARNING ******

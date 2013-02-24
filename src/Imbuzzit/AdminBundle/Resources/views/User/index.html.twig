@@ -1,0 +1,56 @@
+{% extends "ImbuzzitAdminBundle::layout.html.twig" %}
+
+{% block body %}
+<h1 style="float: left;">User list</h1>
+<a href="{{ path('admin_user_new') }}" class="btn btn-primary" style="float: right;">Create a new entry</a>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Name</th>
+            <th>Firstname</th>
+            <th>Isactive</th>
+            <th>Birthday</th>
+            <th>Sexe</th>
+            <th>Account_birthday</th>
+            <th>City</th>
+            <th>Last_connect</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for entity in entities %}
+        {% set sexe = 'form.sexe.'~ entity.sexe %}
+        <tr>
+            <td><a href="{{ path('admin_user_show', { 'id': entity.id }) }}">{{ entity.id }}</a></td>
+            <td>{{ entity.username }}</td>
+            <td>{{ entity.email }}</td>
+            <td>{{ entity.name }}</td>
+            <td>{{ entity.firstname }}</td>
+            <td>{{ entity.isActive }}</td>
+            <td>{% if entity.birthday %}{{ entity.birthday|date('Y-m-d') }}{% endif %}</td>
+            <td>{{ sexe | trans({}, 'user') }}</td>
+            <td>{% if entity.accountbirthday %}{{ entity.accountbirthday|date('Y-m-d') }}{% endif %}</td>
+            <td>{{ entity.city }}</td>
+            <td>{% if entity.lastconnect %}{{ entity.lastconnect|date('Y-m-d H:i:s') }}{% endif %}</td>
+            <td>
+                <ul style="list-style:none;">
+                    <li>
+                        <a href="{{ path('admin_user_show', { 'id': entity.id }) }}" class="btn btn-mini">show</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}" class="btn btn-mini">edit</a>
+                    </li>
+                </ul>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+
+<a href="{{ path('admin_user_new') }}" class="btn btn-primary">Create a new entry</a>
+    
+{% endblock %}

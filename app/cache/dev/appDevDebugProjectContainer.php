@@ -36,19 +36,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'acme.demo.listener' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Acme\DemoBundle\EventListener\ControllerListener A Acme\DemoBundle\EventListener\ControllerListener instance.
-     */
-    protected function getAcme_Demo_ListenerService()
-    {
-        return $this->services['acme.demo.listener'] = new \Acme\DemoBundle\EventListener\ControllerListener($this->get('twig.extension.acme.demo'));
-    }
-
-    /**
      * Gets the 'annotation_reader' service.
      *
      * This service is shared.
@@ -266,11 +253,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return EntityManager5128a31468e32_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager A EntityManager5128a31468e32_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager instance.
+     * @return EntityManager512a54dc3bc27_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager A EntityManager512a54dc3bc27_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager instance.
      */
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
-        require_once '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/jms_diextra/doctrine/EntityManager_5128a31468e32.php';
+        require_once '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/jms_diextra/doctrine/EntityManager_512a54dc3bc27.php';
 
         $a = new \Doctrine\Common\Cache\ArrayCache();
         $a->setNamespace('sf2orm_default_4adef7e2b97a80e174e8612de7ac9eec');
@@ -281,23 +268,26 @@ class appDevDebugProjectContainer extends Container
         $c = new \Doctrine\Common\Cache\ArrayCache();
         $c->setNamespace('sf2orm_default_4adef7e2b97a80e174e8612de7ac9eec');
 
-        $d = new \Doctrine\ORM\Configuration();
-        $d->setEntityNamespaces(array());
-        $d->setMetadataCacheImpl($a);
-        $d->setQueryCacheImpl($b);
-        $d->setResultCacheImpl($c);
-        $d->setMetadataDriverImpl(new \Doctrine\ORM\Mapping\Driver\DriverChain());
-        $d->setProxyDir('/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/doctrine/orm/Proxies');
-        $d->setProxyNamespace('Proxies');
-        $d->setAutoGenerateProxyClasses(true);
-        $d->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
-        $d->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
-        $d->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
+        $d = new \Doctrine\ORM\Mapping\Driver\DriverChain();
+        $d->addDriver(new \Doctrine\ORM\Mapping\Driver\AnnotationDriver($this->get('annotation_reader'), array(0 => '/Users/Frantz/Sites/imbuzzit-new/src/Imbuzzit/ApiBundle/Entity')), 'Imbuzzit\\ApiBundle\\Entity');
 
-        $e = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $d);
-        $this->get('doctrine.orm.default_manager_configurator')->configure($e);
+        $e = new \Doctrine\ORM\Configuration();
+        $e->setEntityNamespaces(array('ImbuzzitApiBundle' => 'Imbuzzit\\ApiBundle\\Entity'));
+        $e->setMetadataCacheImpl($a);
+        $e->setQueryCacheImpl($b);
+        $e->setResultCacheImpl($c);
+        $e->setMetadataDriverImpl($d);
+        $e->setProxyDir('/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/doctrine/orm/Proxies');
+        $e->setProxyNamespace('Proxies');
+        $e->setAutoGenerateProxyClasses(true);
+        $e->setClassMetadataFactoryName('Doctrine\\ORM\\Mapping\\ClassMetadataFactory');
+        $e->setDefaultRepositoryClassName('Doctrine\\ORM\\EntityRepository');
+        $e->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
 
-        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager5128a31468e32_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($e, $this);
+        $f = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $e);
+        $this->get('doctrine.orm.default_manager_configurator')->configure($f);
+
+        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager512a54dc3bc27_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($f, $this);
     }
 
     /**
@@ -361,7 +351,6 @@ class appDevDebugProjectContainer extends Container
         $instance->addListenerService('kernel.controller', array(0 => 'sensio_framework_extra.view.listener', 1 => 'onKernelController'), 0);
         $instance->addListenerService('kernel.view', array(0 => 'sensio_framework_extra.view.listener', 1 => 'onKernelView'), 0);
         $instance->addListenerService('kernel.response', array(0 => 'sensio_framework_extra.cache.listener', 1 => 'onKernelResponse'), 0);
-        $instance->addListenerService('kernel.controller', array(0 => 'acme.demo.listener', 1 => 'onKernelController'), 0);
         $instance->addSubscriberService('response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\ResponseListener');
         $instance->addSubscriberService('streamed_response_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\StreamedResponseListener');
         $instance->addSubscriberService('locale_listener', 'Symfony\\Component\\HttpKernel\\EventListener\\LocaleListener');
@@ -1409,7 +1398,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getSecurity_EncoderFactoryService()
     {
-        return $this->services['security.encoder_factory'] = new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array('Symfony\\Component\\Security\\Core\\User\\User' => array('class' => 'Symfony\\Component\\Security\\Core\\Encoder\\PlaintextPasswordEncoder', 'arguments' => array(0 => false))));
+        return $this->services['security.encoder_factory'] = new \Symfony\Component\Security\Core\Encoder\EncoderFactory(array('Symfony\\Component\\Security\\Core\\User\\User' => array('class' => 'Symfony\\Component\\Security\\Core\\Encoder\\MessageDigestPasswordEncoder', 'arguments' => array(0 => 'sha1', 1 => false, 2 => 1)), 'Imbuzzit\\ApiBundle\\Entity\\User' => array('class' => 'Symfony\\Component\\Security\\Core\\Encoder\\MessageDigestPasswordEncoder', 'arguments' => array(0 => 'sha512', 1 => true, 2 => 5000))));
     }
 
     /**
@@ -2056,7 +2045,7 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTemplating_Helper_TranslatorService()
     {
-        return $this->services['templating.helper.translator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper($this->get('translator'));
+        return $this->services['templating.helper.translator'] = new \Symfony\Bundle\FrameworkBundle\Templating\Helper\TranslatorHelper($this->get('translator.default'));
     }
 
     /**
@@ -2418,19 +2407,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'translator' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * @return Symfony\Component\Translation\IdentityTranslator A Symfony\Component\Translation\IdentityTranslator instance.
-     */
-    protected function getTranslatorService()
-    {
-        return $this->services['translator'] = new \Symfony\Component\Translation\IdentityTranslator($this->get('translator.selector'));
-    }
-
-    /**
      * Gets the 'translator.default' service.
      *
      * This service is shared.
@@ -2440,7 +2416,87 @@ class appDevDebugProjectContainer extends Container
      */
     protected function getTranslator_DefaultService()
     {
-        return $this->services['translator.default'] = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, $this->get('translator.selector'), array('translation.loader.php' => array(0 => 'php'), 'translation.loader.yml' => array(0 => 'yml'), 'translation.loader.xliff' => array(0 => 'xlf', 1 => 'xliff'), 'translation.loader.po' => array(0 => 'po'), 'translation.loader.mo' => array(0 => 'mo'), 'translation.loader.qt' => array(0 => 'ts'), 'translation.loader.csv' => array(0 => 'csv'), 'translation.loader.res' => array(0 => 'res'), 'translation.loader.dat' => array(0 => 'dat'), 'translation.loader.ini' => array(0 => 'ini')), array('cache_dir' => '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/translations', 'debug' => true));
+        $this->services['translator.default'] = $instance = new \Symfony\Bundle\FrameworkBundle\Translation\Translator($this, new \Symfony\Component\Translation\MessageSelector(), array('translation.loader.php' => array(0 => 'php'), 'translation.loader.yml' => array(0 => 'yml'), 'translation.loader.xliff' => array(0 => 'xlf', 1 => 'xliff'), 'translation.loader.po' => array(0 => 'po'), 'translation.loader.mo' => array(0 => 'mo'), 'translation.loader.qt' => array(0 => 'ts'), 'translation.loader.csv' => array(0 => 'csv'), 'translation.loader.res' => array(0 => 'res'), 'translation.loader.dat' => array(0 => 'dat'), 'translation.loader.ini' => array(0 => 'ini')), array('cache_dir' => '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/translations', 'debug' => true));
+
+        $instance->setFallbackLocale('fr');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.bg.xlf', 'bg', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ca.xlf', 'ca', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.cs.xlf', 'cs', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.da.xlf', 'da', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.de.xlf', 'de', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.es.xlf', 'es', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.et.xlf', 'et', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.eu.xlf', 'eu', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fa.xlf', 'fa', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fi.xlf', 'fi', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.fr.xlf', 'fr', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.he.xlf', 'he', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hr.xlf', 'hr', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hu.xlf', 'hu', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.hy.xlf', 'hy', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.id.xlf', 'id', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.it.xlf', 'it', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ja.xlf', 'ja', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lb.xlf', 'lb', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.lt.xlf', 'lt', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.mn.xlf', 'mn', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nb.xlf', 'nb', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.nl.xlf', 'nl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pl.xlf', 'pl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt.xlf', 'pt', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.pt_BR.xlf', 'pt_BR', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ro.xlf', 'ro', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.ru.xlf', 'ru', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sk.xlf', 'sk', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sl.xlf', 'sl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Cyrl.xlf', 'sr_Cyrl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sr_Latn.xlf', 'sr_Latn', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.sv.xlf', 'sv', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.uk.xlf', 'uk', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Validator/Resources/translations/validators.zh_CN.xlf', 'zh_CN', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.bg.xlf', 'bg', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ca.xlf', 'ca', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.cs.xlf', 'cs', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.da.xlf', 'da', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.de.xlf', 'de', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.en.xlf', 'en', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.es.xlf', 'es', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.et.xlf', 'et', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.eu.xlf', 'eu', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fa.xlf', 'fa', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fi.xlf', 'fi', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.fr.xlf', 'fr', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.he.xlf', 'he', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hr.xlf', 'hr', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hu.xlf', 'hu', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.hy.xlf', 'hy', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.id.xlf', 'id', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.it.xlf', 'it', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ja.xlf', 'ja', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lb.xlf', 'lb', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.lt.xlf', 'lt', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.mn.xlf', 'mn', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nb.xlf', 'nb', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.nl.xlf', 'nl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pl.xlf', 'pl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt.xlf', 'pt', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.pt_BR.xlf', 'pt_BR', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ro.xlf', 'ro', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ru.xlf', 'ru', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sk.xlf', 'sk', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sl.xlf', 'sl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Cyrl.xlf', 'sr_Cyrl', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sr_Latn.xlf', 'sr_Latn', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.sv.xlf', 'sv', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.ua.xlf', 'ua', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/vendor/symfony/symfony/src/Symfony/Component/Form/Resources/translations/validators.zh_CN.xlf', 'zh_CN', 'validators');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/src/Imbuzzit/ApiBundle/Resources/translations/messages.fr.xlf', 'fr', 'messages');
+        $instance->addResource('yml', '/Users/Frantz/Sites/imbuzzit-new/src/Imbuzzit/ApiBundle/Resources/translations/user.en.yml', 'en', 'user');
+        $instance->addResource('yml', '/Users/Frantz/Sites/imbuzzit-new/src/Imbuzzit/ApiBundle/Resources/translations/user.fr.yml', 'fr', 'user');
+        $instance->addResource('xlf', '/Users/Frantz/Sites/imbuzzit-new/src/Imbuzzit/AdminBundle/Resources/translations/messages.fr.xlf', 'fr', 'messages');
+
+        return $instance;
     }
 
     /**
@@ -2459,7 +2515,7 @@ class appDevDebugProjectContainer extends Container
 
         $instance->addExtension(new \Symfony\Bundle\SecurityBundle\Twig\Extension\LogoutUrlExtension($this->get('templating.helper.logout_url')));
         $instance->addExtension(new \Symfony\Bridge\Twig\Extension\SecurityExtension($a));
-        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($this->get('translator')));
+        $instance->addExtension(new \Symfony\Bridge\Twig\Extension\TranslationExtension($this->get('translator.default')));
         $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\AssetsExtension($this));
         $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\ActionsExtension($this));
         $instance->addExtension(new \Symfony\Bundle\TwigBundle\Extension\CodeExtension($this));
@@ -2470,7 +2526,6 @@ class appDevDebugProjectContainer extends Container
         $instance->addExtension(new \Symfony\Bundle\AsseticBundle\Twig\AsseticExtension($this->get('assetic.asset_factory'), $this->get('templating.name_parser'), true, array(), array(), $this->get('assetic.value_supplier.default')));
         $instance->addExtension(new \Doctrine\Bundle\DoctrineBundle\Twig\DoctrineExtension());
         $instance->addExtension(new \JMS\SecurityExtraBundle\Twig\SecurityExtension($a));
-        $instance->addExtension($this->get('twig.extension.acme.demo'));
         $instance->addGlobal('app', $this->get('templating.globals'));
 
         return $instance;
@@ -2578,7 +2633,7 @@ class appDevDebugProjectContainer extends Container
     /**
      * Gets the doctrine.orm.entity_manager service alias.
      *
-     * @return EntityManager5128a31468e32_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager An instance of the doctrine.orm.default_entity_manager service
+     * @return EntityManager512a54dc3bc27_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager An instance of the doctrine.orm.default_entity_manager service
      */
     protected function getDoctrine_Orm_EntityManagerService()
     {
@@ -2593,6 +2648,16 @@ class appDevDebugProjectContainer extends Container
     protected function getSession_StorageService()
     {
         return $this->get('session.storage.native');
+    }
+
+    /**
+     * Gets the translator service alias.
+     *
+     * @return Symfony\Bundle\FrameworkBundle\Translation\Translator An instance of the translator.default service
+     */
+    protected function getTranslatorService()
+    {
+        return $this->get('translator.default');
     }
 
     /**
@@ -2821,40 +2886,6 @@ class appDevDebugProjectContainer extends Container
     }
 
     /**
-     * Gets the 'translator.selector' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Symfony\Component\Translation\MessageSelector A Symfony\Component\Translation\MessageSelector instance.
-     */
-    protected function getTranslator_SelectorService()
-    {
-        return $this->services['translator.selector'] = new \Symfony\Component\Translation\MessageSelector();
-    }
-
-    /**
-     * Gets the 'twig.extension.acme.demo' service.
-     *
-     * This service is shared.
-     * This method always returns the same instance of the service.
-     *
-     * This service is private.
-     * If you want to be able to request this service from the container directly,
-     * make it public, otherwise you might end up with broken code.
-     *
-     * @return Acme\DemoBundle\Twig\Extension\DemoExtension A Acme\DemoBundle\Twig\Extension\DemoExtension instance.
-     */
-    protected function getTwig_Extension_Acme_DemoService()
-    {
-        return $this->services['twig.extension.acme.demo'] = new \Acme\DemoBundle\Twig\Extension\DemoExtension($this->get('twig.loader'));
-    }
-
-    /**
      * Gets the 'validator.mapping.class_metadata_factory' service.
      *
      * This service is shared.
@@ -2938,7 +2969,8 @@ class appDevDebugProjectContainer extends Container
                 'JMSAopBundle' => 'JMS\\AopBundle\\JMSAopBundle',
                 'JMSDiExtraBundle' => 'JMS\\DiExtraBundle\\JMSDiExtraBundle',
                 'JMSSecurityExtraBundle' => 'JMS\\SecurityExtraBundle\\JMSSecurityExtraBundle',
-                'AcmeDemoBundle' => 'Acme\\DemoBundle\\AcmeDemoBundle',
+                'ImbuzzitApiBundle' => 'Imbuzzit\\ApiBundle\\ImbuzzitApiBundle',
+                'ImbuzzitAdminBundle' => 'Imbuzzit\\AdminBundle\\ImbuzzitAdminBundle',
                 'WebProfilerBundle' => 'Symfony\\Bundle\\WebProfilerBundle\\WebProfilerBundle',
                 'SensioDistributionBundle' => 'Sensio\\Bundle\\DistributionBundle\\SensioDistributionBundle',
                 'SensioGeneratorBundle' => 'Sensio\\Bundle\\GeneratorBundle\\SensioGeneratorBundle',
@@ -3403,8 +3435,8 @@ class appDevDebugProjectContainer extends Container
             ),
             'jms_di_extra.cache_dir' => '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/jms_diextra',
             'jms_di_extra.doctrine_integration' => true,
-            'jms_di_extra.doctrine_integration.entity_manager.file' => '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/jms_diextra/doctrine/EntityManager_5128a31468e32.php',
-            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager5128a31468e32_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
+            'jms_di_extra.doctrine_integration.entity_manager.file' => '/Users/Frantz/Sites/imbuzzit-new/app/cache/dev/jms_diextra/doctrine/EntityManager_512a54dc3bc27.php',
+            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager512a54dc3bc27_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
             'security.secured_services' => array(
 
             ),

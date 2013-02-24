@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>{% block title %}Imbuzzit Admin{% endblock %}</title>
+
+    {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('bundles/imbuzzitadmin/css/bootstrap.min.css') }}" type="text/css" />
+            <link rel="stylesheet" href="{{ asset('bundles/imbuzzitadmin/css/bootstrap-responsive.min.css') }}" type="text/css" />
+    {% endblock %}
+  </head>
+  <body style="padding-top: 50px;">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a href="" class="brand">Imbuzzit Admin</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="">Home</a>
+              </li>
+              <li class="active">
+                <a href="{{ path('admin_user') }}">Users</a>
+              </li>
+              <li class="">
+                <a href="">Streams</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div id="content" class="container">
+        {% block body %}
+        {% endblock %}
+      </div>
+    </div>
+    {% block javascripts %}
+      <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
+      <script type="text/javascript" src="{{ asset('bundles/imbuzzitadmin/js/bootstrap.min.js') }}"></script>
+    {% endblock %}
+  </body>
+</html>

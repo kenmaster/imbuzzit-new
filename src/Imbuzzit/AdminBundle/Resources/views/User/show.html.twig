@@ -1,6 +1,9 @@
+{% extends "ImbuzzitAdminBundle::layout.html.twig" %}
+
+{% block body %}
 <h1>User</h1>
 
-<table class="record_properties">
+<table class="table table-bordered">
     <tbody>
         <tr>
             <th>Id</th>
@@ -67,19 +70,20 @@
 
 <ul class="record_actions">
     <li>
-        <a href="{{ path('admin_user') }}">
+      <a href="{{ path('admin_user') }}" class="btn">
             Back to the list
         </a>
     </li>
     <li>
-        <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}">
+      <a href="{{ path('admin_user_edit', { 'id': entity.id }) }}" class="btn">
             Edit
         </a>
     </li>
     <li>
         <form action="{{ path('admin_user_delete', { 'id': entity.id }) }}" method="post">
             {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
+            <button type="submit" class="btn btn-danger">Delete</button>
         </form>
     </li>
 </ul>
+{% endblock %}

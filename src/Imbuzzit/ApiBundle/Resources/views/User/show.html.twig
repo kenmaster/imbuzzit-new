@@ -1,85 +1,21 @@
-<h1>User</h1>
+<?xml version="1.0" encoding="windows-1250"?>
 
-<table class="record_properties">
-    <tbody>
-        <tr>
-            <th>Id</th>
-            <td>{{ entity.id }}</td>
-        </tr>
-        <tr>
-            <th>Username</th>
-            <td>{{ entity.username }}</td>
-        </tr>
-        <tr>
-            <th>Email</th>
-            <td>{{ entity.email }}</td>
-        </tr>
-        <tr>
-            <th>Name</th>
-            <td>{{ entity.name }}</td>
-        </tr>
-        <tr>
-            <th>Firstname</th>
-            <td>{{ entity.firstname }}</td>
-        </tr>
-        <tr>
-            <th>Isactive</th>
-            <td>{{ entity.isActive }}</td>
-        </tr>
-        <tr>
-            <th>Birthday</th>
-            <td>{{ entity.birthday|date('Y-m-d') }}</td>
-        </tr>
-        <tr>
-            <th>Sexe</th>
-            <td>{{ entity.sexe }}</td>
-        </tr>
-        <tr>
-            <th>Account_birthday</th>
-            <td>{{ entity.accountbirthday|date('Y-m-d H:i:s') }}</td>
-        </tr>
-        <tr>
-            <th>Biography</th>
-            <td>{{ entity.biography }}</td>
-        </tr>
-        <tr>
-            <th>City</th>
-            <td>{{ entity.city }}</td>
-        </tr>
-        <tr>
-            <th>Influence</th>
-            <td>
-              {% for inf in entity.influence %}
-                {{ inf }}
-              {% endfor %}
-            </td>
-        </tr>
-        <tr>
-            <th>Equipment</th>
-            <td>{{ entity.equipment }}</td>
-        </tr>
-        <tr>
-            <th>Last_connect</th>
-            <td>{{ entity.lastconnect|date('Y-m-d H:i:s') }}</td>
-        </tr>
-    </tbody>
-</table>
-
-<ul class="record_actions">
-    <li>
-        <a href="{{ path('user') }}">
-            Back to the list
-        </a>
-    </li>
-    <li>
-        <a href="{{ path('api_user_edit', { 'id': entity.id }) }}">
-            Edit
-        </a>
-    </li>
-    <li>
-        <form action="{{ path('api_user_delete', { 'id': entity.id }) }}" method="post">
-            {{ form_widget(delete_form) }}
-            <button type="submit">Delete</button>
-        </form>
-    </li>
-</ul>
+<xml>
+    {% for u in user %}
+    {% for key, line in u %}
+        {% if (key == 'birthday') %}
+            <{{key}}>{{ line|date('Y-m-d') }}</{{key}}>
+        {% elseif (key == 'account_birthday') %}
+            <{{key}}>{{ line|date('Y-m-d') }}</{{key}}>
+        {% elseif (key == 'influence') %}
+            <influences>
+            {% for influence in line %}
+                <influence>{{ influence }}</influence>
+            {% endfor %}
+            </influences>
+        {% else %}
+            <{{key}}>{{line}}</{{key}}>
+        {% endif %}
+    {% endfor %}
+    {% endfor %}
+</xml>

@@ -3,16 +3,18 @@
 namespace Imbuzzit\ApiBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use Imbuzzit\ApiBundle\Entity\User;
 use Imbuzzit\ApiBundle\Form\UserType;
+use FOS\RestBundle\Controller\Annotations as Rest;
 
 /**
  * User controller.
  *
  */
-class UserController extends Controller
+class UserController extends DefaultController
 {
     /**
      * Lists all User entities.
@@ -20,13 +22,19 @@ class UserController extends Controller
      */
     public function indexAction()
     {
+        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
 
-        $entities = $em->getRepository('ImbuzzitApiBundle:User')->findAll();
+        $options = array(
+            'fields' => $request->get('fields')
+        );
 
-        return $this->render('ImbuzzitApiBundle:User:index.html.twig', array(
-            'entities' => $entities,
-        ));
+        $users = $em->getRepository('ImbuzzitApiBundle:User')->findAllUsers($options);
+
+        if ($this->getFormat() == 'xml') {
+            return $this->render('ImbuzzitApiBundle:User:index.html.twig', array('users' => $users));
+        }
+        return new Response(json_encode(array('Result' => $users)));        
     }
 
     /**
@@ -34,20 +42,24 @@ class UserController extends Controller
      *
      */
     public function showAction($id)
-    {
+    {   
+        $request = $this->getRequest();
         $em = $this->getDoctrine()->getManager();
 
-        $entity = $em->getRepository('ImbuzzitApiBundle:User')->find($id);
+        $options = array(
+            'fields' => $request->get('fields')
+        );
 
-        if (!$entity) {
+        $user = $em->getRepository('ImbuzzitApiBundle:User')->findOneUser($id, $options);
+
+        if (!$user) {
             throw $this->createNotFoundException('Unable to find User entity.');
         }
 
-        $deleteForm = $this->createDeleteForm($id);
-
-        return $this->render('ImbuzzitApiBundle:User:show.html.twig', array(
-            'entity'      => $entity,
-            'delete_form' => $deleteForm->createView(),        ));
+        if ($this->getFormat() == 'xml') {
+            return $this->render('ImbuzzitApiBundle:User:show.html.twig', array('user' => $user));
+        }
+        return new Response(json_encode(array('Result' => $user)));
     }
 
     /**

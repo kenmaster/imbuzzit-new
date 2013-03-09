@@ -12,4 +12,39 @@ use Doctrine\ORM\EntityRepository;
  */
 class UsersRepository extends EntityRepository
 {
+	public function findAllUsers($options = null)
+	{
+		$queryBuilder = $this->createQueryBuilder('u');
+
+		if (!is_null($options) && is_array($options)) {
+			if (array_key_exists('fields', $options) && $options['fields'] == 'partial') {
+				$queryBuilder->select('u.id, u.username, u.email, u.name, u.firstname, u.sexe');
+			}
+		}
+		$query = $queryBuilder->getQuery();
+
+	    $result = $query->getArrayResult();
+
+	    return $result;
+	}
+
+	public function findOneUser($user_id, $options = null)
+	{
+		$queryBuilder = $this->createQueryBuilder('u');
+
+		if (!is_null($options) && is_array($options)) {
+			if (array_key_exists('fields', $options) && $options['fields'] == 'partial') {
+				$queryBuilder->select('u.id, u.username, u.email, u.name, u.firstname, u.sexe');
+			}
+		}
+		$queryBuilder
+			->where('u.id = :userID')
+			->setParameter('userID', $user_id);
+
+		$query = $queryBuilder->getQuery();
+
+	    $result = $query->getArrayResult();
+
+	    return $result;
+	}
 }

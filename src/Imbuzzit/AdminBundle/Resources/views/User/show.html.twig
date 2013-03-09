@@ -35,7 +35,7 @@
         </tr>
         <tr>
             <th>Sexe</th>
-            <td>{{ entity.sexe }}</td>
+            <td>{{ 'form.sexe.'~ entity.sexe | trans({}, 'user') }}</td>
         </tr>
         <tr>
             <th>Account_birthday</th>

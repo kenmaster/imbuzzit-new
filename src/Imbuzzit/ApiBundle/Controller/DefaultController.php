@@ -6,8 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function indexAction($name)
+    public function getFormat()
     {
-        return $this->render('ImbuzzitApiBundle:Default:index.html.twig', array('name' => $name));
+    	$request = $this->getRequest();
+
+    	$format = $request->get('_format');
+
+    	return $format;
+
     }
 }

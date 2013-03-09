@@ -1,3 +1,7 @@
 ImbuzzitApiBundle_user:
         resource: "@ImbuzzitApiBundle/Resources/config/routing/user.yml"
-        prefix:   /user
+        prefix:   /
+
+ImbuzzitApiBundle_stream:
+        resource: "@ImbuzzitApiBundle/Resources/config/routing/stream.yml"
+        prefix:   /stream

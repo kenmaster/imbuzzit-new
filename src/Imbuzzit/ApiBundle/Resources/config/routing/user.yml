@@ -1,10 +1,16 @@
 api_user:
-    pattern:  /
-    defaults: { _controller: "ImbuzzitApiBundle:User:index" }
+    pattern:  /user.{_format}
+    defaults: { _controller: "ImbuzzitApiBundle:User:index", _format: json, fields: partial  }
+    requirements:
+        fields:  all|partial
+        _format: json|xml
 
 api_user_show:
-    pattern:  /{id}/show
-    defaults: { _controller: "ImbuzzitApiBundle:User:show" }
+    pattern:  /user/{id}/get.{_format}
+    defaults: { _controller: "ImbuzzitApiBundle:User:show", _format: json, fields: partial }
+    requirements:
+        fields:  all|partial
+        _format: json|xml
 
 api_user_new:
     pattern:  /new

@@ -88,7 +88,7 @@ class UserController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_show', array('id' => $entity->getId())));
+            return $this->redirect($this->generateUrl('admin_user_show', array('id' => $entity->getId())));
         }
 
         return $this->render('ImbuzzitAdminBundle:User:new.html.twig', array(
@@ -143,7 +143,7 @@ class UserController extends Controller
             $em->persist($entity);
             $em->flush();
 
-            return $this->redirect($this->generateUrl('user_edit', array('id' => $id)));
+            return $this->redirect($this->generateUrl('admin_user_edit', array('id' => $id)));
         }
 
         return $this->render('ImbuzzitAdminBundle:User:edit.html.twig', array(

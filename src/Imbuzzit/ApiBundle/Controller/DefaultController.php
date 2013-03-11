@@ -15,4 +15,13 @@ class DefaultController extends Controller
     	return $format;
 
     }
+
+    public function getStatusCode()
+    {
+    	$request = $this->getRequest();
+
+    	$statusCode = $request->get('_statusCode');
+
+    	return $statusCode;
+    }
 }

@@ -4,33 +4,44 @@ api_user:
     requirements:
         fields:  all|partial
         _format: json|xml
+        _method: GET
 
-api_user_show:
+api_user_get:
     pattern:  /user/{id}/get.{_format}
-    defaults: { _controller: "ImbuzzitApiBundle:User:show", _format: json, fields: partial }
+    defaults: { _controller: "ImbuzzitApiBundle:User:get", _format: json, fields: partial }
     requirements:
         fields:  all|partial
         _format: json|xml
+        _method: GET
 
 api_user_new:
-    pattern:  /new
+    pattern:  /user/new
     defaults: { _controller: "ImbuzzitApiBundle:User:new" }
+    requirements:
+        _method: POST
+
 
 api_user_create:
-    pattern:  /create
+    pattern:  /user/create
     defaults: { _controller: "ImbuzzitApiBundle:User:create" }
-    requirements: { _method: post }
+    requirements:
+        _method: POST
 
 api_user_edit:
-    pattern:  /{id}/edit
-    defaults: { _controller: "ImbuzzitApiBundle:User:edit" }
+    pattern:  /user/{id}/edit
+    defaults: { _controller: "ImbuzzitApiBundle:User:edit"}
+    requirements:
+        _method: PUT
 
 api_user_update:
     pattern:  /{id}/update
     defaults: { _controller: "ImbuzzitApiBundle:User:update" }
-    requirements: { _method: post }
+    requirements:
+        _method: POST
 
 api_user_delete:
-    pattern:  /{id}/delete
+    pattern:  /user/{id}/delete
     defaults: { _controller: "ImbuzzitApiBundle:User:delete" }
-    requirements: { _method: post }
+    requirements:
+        _method: DELETE
+

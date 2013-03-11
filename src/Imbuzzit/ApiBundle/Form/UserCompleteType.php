@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-class UserType extends AbstractType
+class UserCompleteType extends AbstractType
 { 
   private $locale = 'fr';
 
@@ -20,18 +20,32 @@ class UserType extends AbstractType
         } else {
           $locale = $this->locale;
         }
-        $dateFormat = array('fr' => 'dd-mm-yyyy', 'en' => 'yyyy-MM-dd');
+        $dateFormat = array('fr' => 'dd-MM-yyyy', 'en' => 'yyyy-MM-dd');
         
         $builder
-            ->add('username', 'text', array('description' => 'The Username '))
+            ->add('username')
             ->add('salt', 'hidden', array('mapped' => false))
             ->add('email', 'email')
             ->add('isActive', 'hidden', array('mapped' => false))
-            ->add('birthday','date')
-            ->add('sexe','text')
-        ;
-        if ($complete) {
-          $builder
+            ->add(
+                  'birthday',
+                  'birthday', 
+                  array(
+                    'format' => $dateFormat[$locale], 
+                    'years'  => $yearsList
+                  )
+            )
+            ->add(
+                  'sexe',
+                  'choice',
+                  array(
+                        'choices' => array(
+                            '0'=> 'male',
+                            '1'=> 'female'
+                        ),
+                        'translation_domain' => 'api'
+                  )
+            )
             ->add('name')
             ->add('firstname')
             ->add('biography', 'textarea', array('required' => false))
@@ -39,26 +53,19 @@ class UserType extends AbstractType
             ->add('influence')
             ->add('equipment')
           ;
-        } else {
-          $builder
-            ->add('account_birthday', 'hidden', array('mapped' => false))
-            ->add('password', 'password')
-          ;
-        }
     }
 
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
             'data_class' => 'Imbuzzit\ApiBundle\Entity\User',
-            'csrf_protection'   => false,
-            'complete' => false
+            'csrf_protection'   => false
         ));
     }
 
     public function getName()
     {
-        return 'user';
+        return 'imbuzzit_apibundle_usertype';
     }
     
     public function getYears()
